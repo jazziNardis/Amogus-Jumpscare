@@ -1,0 +1,113 @@
+@font-face {
+  font-family: Amongus;
+  src: url('amogus-font.ttf');
+}
+html {
+  background-color: black;
+  background-image: url('../images/bg.png');
+}
+
+/* Only for Chromium */
+html {
+  height: 100px;
+  width: 290px;
+}
+
+/* Only for Mozilla */
+body {
+  height: 100px;
+  width: 290px;
+}
+
+* {
+  font-family: Amongus;
+}
+
+button {
+  border-radius: 2px;
+  margin: auto;
+  padding: 3px;
+}
+
+.body-top p {
+  color: white;
+  font-size: 35px;
+  border: 5px white;
+  margin: auto;
+  height: 30px;
+}
+
+.choose-file * {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.choose-file {
+  border-radius: 2px;
+  margin: auto;
+  padding: 3px;
+  border: 2px solid;
+  background-color: transparent;
+  color: white;
+  width: 65%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+}
+
+.toggle {
+  outline: none;
+  border: none;
+  font-size: 25px;
+  background-color: white;
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+}
+
+.github-button {
+  margin-bottom: 5px;
+  border: none;
+}
+
+.github-button img {
+  background-color: grey;
+  border-radius: 2px;
+  position: relative;
+  bottom: 5px;
+}
+
+
+.left {
+  float: left;
+  margin-right: 4px;
+}
+
+.right {
+  float: right;
+  margin-left: 4px;
+}
+
+.body-top {
+  top: 3px;
+  position: relative;
+}
+
+.body-bottom {
+  top: 15px;
+  position: relative;
+}
+
+.credits {
+  height: 40px;
+}
+
+.credits p {
+  font-size: 7px;
+  font-family: 'Helvetica';
+  color: grey;
+  position: relative;
+  bottom: 12px;
+}

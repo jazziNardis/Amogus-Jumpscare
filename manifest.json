@@ -1,0 +1,55 @@
+{
+  "name": "Amogus Jumpscare",
+  "description": "Dread it. Run from it.",
+  "version": "1.0",
+  "author": "jazziNardis",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "ඞmogus Jumpscare",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "/images/icon_16.png",
+      "32": "/images/icon_32.png",
+      "48": "/images/icon_48.png",
+      "128": "/images/icon_128.png"
+    }
+  },
+  "icons": {
+    "16": "/images/icon_16.png",
+    "32": "/images/icon_32.png",
+    "48": "/images/icon_48.png",
+    "128": "/images/icon_128.png"
+  },
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    // Only for Mozilla
+    "scripts": ["background.js"],
+    // Only for Chromium
+    "service_worker": "background.js"
+    },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["player.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["/files/amogus.mp3", "/files/bad-to-the-bone-riff.mp3", "/files/falling-metal-pipe.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  // Only for Mozilla
+  "browser_specific_settings": {
+  "gecko": {
+    "id": "amogus@sus"
+  }
+}
+}
