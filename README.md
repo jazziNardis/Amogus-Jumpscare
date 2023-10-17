@@ -21,7 +21,7 @@ Furthermore, you can click on the arrows to cicle through the three available so
   <img alt='Icon of the extension' height='250px' src="screenshots/sounds.png" />
 </p>
 
-Finally. the "GitHub" button opens this page.
+Finally. the "GitHub" button redirects to page.
 
 ## Installation
 The extension is already available on the [Mozilla add-ons store](https://addons.mozilla.org/it/firefox/addon/amogus-jumpscare/), while a version for Chromium is still coming. Stay tuned!
