@@ -7,13 +7,6 @@ html {
   background-image: url('../images/bg.png');
 }
 
-/* Only for Chromium */
-html {
-  height: 100px;
-  width: 290px;
-}
-
-/* Only for Mozilla */
 body {
   height: 100px;
   width: 290px;
@@ -110,4 +103,26 @@ button {
   color: grey;
   position: relative;
   bottom: 12px;
+}
+
+body {
+  height: 160px;
+}
+
+.volume-controls {
+  color: white;
+  text-align: left;
+  margin-top: 25px;
+  font-size: 13px;
+}
+
+#volume {
+  width: 150px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+#test-sound {
+  cursor: pointer;
+  margin-left: 8px;
 }

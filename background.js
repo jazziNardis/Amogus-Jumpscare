@@ -1,6 +1,5 @@
 // background.js
 // Author: jazziNardis
-
 /*
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀
@@ -22,57 +21,85 @@
 ⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 */
-// Start of the code.
 
-// This Promise becomes resolved only after a set amount of ms.
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+//
+// Firefox event page. A random one-shot alarm (30 s to 16 min) wakes the page,
+// which plays the selected sound directly (the background page has a DOM, so
+// no content script or tab is needed) and schedules the next alarm.
 
+const api = globalThis.browser ?? globalThis.chrome;
+
+const ALARM_NAME = 'playSound';
+const MIN_DELAY_MS = 30 * 1000;
+const MAX_DELAY_MS = 16 * 60 * 1000;
 
 // Randomly generates an integer between two set numbers.
 const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-// Receive a message from the content script to avoid becoming inactive
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  sendResponse();}
-);
+function scheduleNext() {
+  const delay = random(MIN_DELAY_MS, MAX_DELAY_MS);
+  const when = Date.now() + delay;
 
-// Automatically injects content script in all of the tabs as soon as the
-// extension is installed or updated. Also, defines isOn if it is undefined.
-chrome.runtime.onInstalled.addListener(async () => {
-  chrome.storage.local.get('isOn', result => {
-    if (result.isOn == undefined) {
-      chrome.storage.local.set({'isOn': true});
-    }
-  })
-  chrome.storage.local.get('audioFile', result => {
-    if (result.audioFile == undefined) {
-      chrome.storage.local.set({'audioFile': 0});
-    }
-  })
-  for (const cs of chrome.runtime.getManifest().content_scripts) {
-    for (const tab of await chrome.tabs.query({url: cs.matches})) {
-      chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        files: cs.js,
-      }).catch(error => {});
-    }
+  api.alarms.create(ALARM_NAME, { when });
+
+  console.log(
+    'Next sound scheduled for ' + new Date(when).toLocaleTimeString() +
+    ' (in ' + Math.round(delay / 1000) + ' s)'
+  );
+}
+
+async function ensureAlarm() {
+  const existing = await api.alarms.get(ALARM_NAME);
+  if (!existing) scheduleNext();
+}
+
+// Kept in a variable so the audio is not garbage collected mid-playback.
+let currentAudio = null;
+
+async function playSound() {
+  const { isOn = true, selectedSound = 0, volume = 20 } =
+    await api.storage.local.get(['isOn', 'selectedSound', 'volume']);
+  if (!isOn) return;
+
+  let sounds;
+  try {
+    const response = await fetch(api.runtime.getURL('sounds/sounds.json'));
+    sounds = await response.json();
+  } catch (error) {
+    console.error('Could not load sounds.json:', error);
+    return;
   }
+  if (!Array.isArray(sounds) || sounds.length === 0) return;
+
+  const file = sounds[selectedSound] ?? sounds[0];
+
+  currentAudio = new Audio(api.runtime.getURL('sounds/' + file));
+  currentAudio.volume = Math.min(1, Math.max(0, volume / 100));
+  try {
+    await currentAudio.play();
+    console.log('Playing sound:', file);
+  } catch (error) {
+    console.error('Could not play sound:', error);
+  }
+}
+
+// Listeners must be registered synchronously at top level so the event page
+// can be woken by them.
+api.runtime.onInstalled.addListener(async () => {
+  const stored = await api.storage.local.get(['isOn', 'selectedSound', 'volume']);
+  const defaults = {};
+  if (stored.isOn === undefined) defaults.isOn = true;
+  if (stored.selectedSound === undefined) defaults.selectedSound = 0;
+  if (stored.volume === undefined) defaults.volume = 20;
+  if (Object.keys(defaults).length) await api.storage.local.set(defaults);
+
+  scheduleNext();
 });
 
+api.runtime.onStartup.addListener(ensureAlarm);
 
-// Waits until callPlayer() Promise is resolved in order to pass a message to
-// player.js.
-async function callPlayer() {
-  let delay = random(30000, 960000);
-  await sleep(delay);
-  chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-    if (tabs[0]) {
-      chrome.tabs.sendMessage(tabs[0].id, {amogus: true}).catch(error => {});
-    }
-  });
-  callPlayer(); // A recursion makes callPlayer() run forever.
-}
-// Runs callPlayer() while the tab is active. Now the chosen audio file will
-// play at random intervals between 30 sec. and 16 min., therefore leaving the
-// user waiting for the next sfx in a state of absolute fear and terror.
-callPlayer();
+api.alarms.onAlarm.addListener(async alarm => {
+  if (alarm.name !== ALARM_NAME) return;
+  scheduleNext();
+  await playSound();
+});

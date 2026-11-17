@@ -15,11 +15,14 @@ As the name suggests, Amogus Jumpscare is a joke extension that randomly plays a
 
 When first installed, the extension is enabled by default. To disable it, click on the white toggle in the top-left corner of the pop-up.
 
-Furthermore, you can click on the arrows to cicle through the three available sound effects:
+Furthermore, you can click on the arrows to cicle through the multiple available sound effects:
 
 <p align="center">
   <img alt='Icon of the extension' height='250px' src="screenshots/sounds.png" />
 </p>
+
+To maximuse pranking efficiency, you can test the sound played with a nice button, and adjust the volume accordingly to properly
+earrape your victim (or yourself).
 
 Finally. the "GitHub" button redirects to page.
 
@@ -27,7 +30,7 @@ Finally. the "GitHub" button redirects to page.
 The extension is already available on the [Mozilla add-ons store](https://addons.mozilla.org/it/firefox/addon/amogus-jumpscare/), while a version for Chromium is still coming. Stay tuned!
 
 ## Important Notes
-On Firefox, you may need to allow audio autoplay for this extension to work properly.
+On Firefox, you will need to allow audio autoplay for this extension to work properly.
 
 Please do note that, by using this software, you acknowledge that amogus memes are still funny.
 > <a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Freepik - Flaticon</a>

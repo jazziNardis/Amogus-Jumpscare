@@ -1,7 +1,7 @@
 {
   "name": "Amogus Jumpscare",
   "description": "Randomly plays a funny and totally-not-overused sound effect.",
-  "version": "1.0",
+  "version": "1.1",
   "author": "jazziNardis",
   "manifest_version": 3,
   "action": {
@@ -23,7 +23,8 @@
   "permissions": [
     "tabs",
     "scripting",
-    "storage"
+    "storage",
+    "alarms"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -33,23 +34,24 @@
     "scripts": ["background.js"],
     // Only for Chromium
     "service_worker": "background.js"
-    },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["player.js"]
-    }
-  ],
+  },
   "web_accessible_resources": [
     {
-      "resources": ["/files/amogus.mp3", "/files/bad-to-the-bone-riff.mp3", "/files/falling-metal-pipe.mp3"],
+      "resources": [
+        "/sounds/amongus.mp3",
+        "/sounds/bad-to-the-bone-riff.mp3",
+        "/sounds/falling-metal-pipe.mp3",
+        "/sounds/among-us.mp3",
+        "/sounds/amongus-kill.mp3",
+        "/sounds/amogus-role-reveal-bass-boosted.mp3"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
   // Only for Mozilla
   "browser_specific_settings": {
-  "gecko": {
-    "id": "amogus@sus"
+    "gecko": {
+      "id": "amogus@sus"
+    }
   }
-}
 }
